@@ -1,11 +1,50 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+
+import NavBar from "../components/NavBar.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-	<Welcome />
+  <NavBar />
+
+  <div class="px-4 py-4">
+    <p class="text-xl underline">
+      Generated Reports
+    </p>
+
+    <table class="w-5/6 border-collapse border border-gray-400">
+      <thead>
+        <tr>
+          <th class="border border-gray-400">Report Category</th>
+          <th class="border border-gray-400">Address</th>
+          <th class="border border-gray-400">Date Created</th>
+          <th class="border border-gray-400">Resolved</th>
+        </tr>
+      </thead>
+
+      <tbody class="text-center">
+        <tr>
+          <td class="border border-gray-400">Category 1</td>
+          <td class="border border-gray-400">123 Sesame Street, Toronto ON, A1B 2C3</td>
+          <td class="border border-gray-400">2025/01/02</td>
+          <td class="border border-gray-400">✔</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-400">Category 2</td>
+          <td class="border border-gray-400">456 Drone Drive, Toronto ON, D4E 5F6</td>
+          <td class="border border-gray-400">2025/04/05</td>
+          <td class="border border-gray-400">✘</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="fixed bottom-4 right-4">
+      <button class="bg-blue-400 border-2 border-black font-bold py-2 px-4">
+        +
+      </button>
+    </div>
+  </div>
 </Layout>
