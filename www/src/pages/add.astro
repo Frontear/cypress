@@ -1,0 +1,32 @@
+---
+import { db, Report } from 'astro:db';
+
+if (Astro.request.method === 'POST') {
+  // Parse form data
+  const formData = await Astro.request.formData();
+  const reportCategory = formData.get('reportCategory');
+  const address = formData.get('address');
+  if (typeof reportCategory === 'string' && typeof address === 'string') {//need to change address type?
+    // Insert form data into the Comment table
+    await db.insert(Report).values({ reportCategory, address });
+
+    return Astro.redirect('/');
+  }
+}
+
+// Render the new list of comments on each request
+const reports = await db.select().from(Report);
+---
+
+<h2>Create Report</h2>
+
+<form method="POST" style="display: grid">
+  <label for="reportCategory">Enter Report Category:</label>
+  <input id="reportCategory" name="reportCategory" />
+
+  <label for="address">Enter Address:</label>
+  <textarea id="address" name="address"></textarea>
+
+  <button type="submit">Submit</button>
+</form>
+
