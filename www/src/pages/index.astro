@@ -3,6 +3,12 @@ import Layout from "../layouts/Layout.astro";
 
 import NavBar from "../components/NavBar.astro";
 
+import { db, Report } from 'astro:db';
+
+const reports = await db.select().from(Report);
+
+
+
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
@@ -26,25 +32,27 @@ import NavBar from "../components/NavBar.astro";
       </thead>
 
       <tbody class="text-center">
-        <tr>
-          <td class="border border-gray-400">Category 1</td>
-          <td class="border border-gray-400">123 Sesame Street, Toronto ON, A1B 2C3</td>
-          <td class="border border-gray-400">2025/01/02</td>
-          <td class="border border-gray-400">✔</td>
-        </tr>
-        <tr>
-          <td class="border border-gray-400">Category 2</td>
-          <td class="border border-gray-400">456 Drone Drive, Toronto ON, D4E 5F6</td>
-          <td class="border border-gray-400">2025/04/05</td>
-          <td class="border border-gray-400">✘</td>
-        </tr>
+          {
+          reports
+          //.sort((a,b) => new Date(b.createdAt)- new Date(a.createdAt))
+          .map((report) => (
+            <tr>
+              <td class="border border-gray-400">{report.reportCategory}</td>
+              <td class="border border-gray-400">{report.address}</td>
+              <td class="border border-gray-400">{report.createdAt}</td>
+              <td class="border border-gray-400">✘</td>
+            </tr>
+          ))}
       </tbody>
     </table>
 
     <div class="fixed bottom-4 right-4">
-      <button class="bg-blue-400 border-2 border-black font-bold py-2 px-4">
+      <!-- <button class="bg-blue-400 border-2 border-black font-bold py-2 px-4">
         +
-      </button>
+      </button> -->
+      <a href="./add" class="bg-blue-400 border-2 border-black font-bold py-2 px-4">+ Create Report</a>
+
     </div>
+    
   </div>
 </Layout>
