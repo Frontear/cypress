@@ -1,15 +1,21 @@
-import { defineDb, defineTable, column, NOW } from 'astro:db';
+import {
+  NOW,
+  column,
+  defineDb,
+  defineTable,
+} from "astro:db";
 
 const Report = defineTable({
   columns: {
-    id: column.number({primaryKey:true}),
+    id: column.number({ primaryKey: true }),
     reportCategory: column.text(),
     address: column.text(),
-    createdAt: column.date({default: NOW}),
-    
-  }
+    createdAt: column.date({ default: NOW }),
+  },
 })
 
 export default defineDb({
-  tables: { Report },
+  tables: {
+    Report,
+  },
 })
