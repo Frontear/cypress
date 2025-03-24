@@ -1,32 +1,40 @@
 ---
-import { db, Report } from 'astro:db';
+import Layout from "../layouts/Layout.astro";
+import NavBar from "../components/NavBar.astro";
+import {
+  Report,
+  db,
+} from "astro:db";
 
-if (Astro.request.method === 'POST') {
-  // Parse form data
-  const formData = await Astro.request.formData();
-  const reportCategory = formData.get('reportCategory');
-  const address = formData.get('address');
-  if (typeof reportCategory === 'string' && typeof address === 'string') {//need to change address type?
-    // Insert form data into the Comment table
-    await db.insert(Report).values({ reportCategory, address });
 
-    return Astro.redirect('/');
-  }
+if (Astro.request.method === "POST") {
+  const data = await Astro.request.formData();
+
+  const category = data.get("category");
+  const address = data.get("address");
+
+  // TODO: validate form client-side
+  await db.insert(Report).values({ category, address });
+  return Astro.redirect("/");
 }
-
-// Render the new list of comments on each request
-const reports = await db.select().from(Report);
 ---
+<Layout>
+  <NavBar />
 
-<h2>Create Report</h2>
+  <div class="px-4 py-4">
+    <p class="mb-4 text-xl underline">Create Report</p>
 
-<form method="POST" style="display: grid">
-  <label for="reportCategory">Enter Report Category:</label>
-  <input id="reportCategory" name="reportCategory" />
+    <form class="grid" method="POST">
+      <label class="text-md font-medium" for="category">Report Category</label>
+      <select class="border border-gray-400 rounded-lg" name="category" id="category">
+        <option value="Pothole">Pothole</option>
+        <option value="Traffic">Traffic</option>
+      </select>
 
-  <label for="address">Enter Address:</label>
-  <textarea id="address" name="address"></textarea>
+      <label class="mt-2 text-md font-medium" for="address">Address</label>
+      <textarea class="border border-gray-400 rounded-lg" name="address" id="address"></textarea>
 
-  <button type="submit">Submit</button>
-</form>
-
+      <button class="mt-4 px-5 py-2.5 bg-gray-200 border border-gray-400 rounded-lg" type="submit">Submit</button>
+    </form>
+  </div>
+</Layout>

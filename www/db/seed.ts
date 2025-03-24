@@ -8,8 +8,9 @@ export default async function seed() {
   await db.insert(Report).values([
     {
       id: 1,
-      reportCategory: "Traffic",
+      category: "Traffic",
       address: "350 Victoria Street, Toronto ON M5B 2K3",
+      resolved: true,
     },
   ]);
 }

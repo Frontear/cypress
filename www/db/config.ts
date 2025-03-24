@@ -8,9 +8,10 @@ import {
 const Report = defineTable({
   columns: {
     id: column.number({ primaryKey: true }),
-    reportCategory: column.text(),
+    category: column.text(),
     address: column.text(),
     createdAt: column.date({ default: NOW }),
+    resolved: column.boolean({ default: false }),
   },
 })
 
