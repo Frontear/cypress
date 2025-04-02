@@ -32,9 +32,24 @@ if (Astro.request.method === "POST") {
       </select>
 
       <label class="mt-2 text-md font-medium" for="address">Address</label>
-      <textarea class="border border-gray-400 rounded-lg" name="address" id="address"></textarea>
-
+      <div class="grid gap-1">
+        <textarea id="address" class="border border-gray-400 rounded-lg" name="address" id="address"></textarea>
+        <a href="/map" class="text-blue-500 underline hover:text-blue-700" >Search address</a>
+      </div>
       <button class="mt-4 px-5 py-2.5 bg-gray-200 border border-gray-400 rounded-lg" type="submit">Submit</button>
     </form>
   </div>
 </Layout>
+<script>
+  // Get the URL parameters (lat and lng)
+  const urlParams = new URLSearchParams(window.location.search);
+  const address = urlParams.get('addr');
+  //const lng = urlParams.get('lng');
+
+  // Display the lat/lng in the textarea
+  if (address) {
+      document.getElementById('address').value =  address;
+  } else {
+      document.getElementById('address').value = '';
+  }
+</script>

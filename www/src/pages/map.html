@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #map { height: 500px;top: 50px;bottom: 50px; position: relative; }
+    </style>
+    <title>Cypress</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        var map = L.map('map').setView([43.6891, -79.4163], 11);
+        
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19, 
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        var marker;
+        function onMapClick(e) {
+            var address=e.latlng;
+            if(marker){
+                marker.remove();
+            }
+            marker=L.marker(address).addTo(map);
+            
+            var url = `https://nominatim.openstreetmap.org/reverse?lat=${address.lat}&lon=${address.lng}&format=json&zoom=18`;
+
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                var addr='add?addr=' + data.display_name;
+                window.location.href = addr;
+            }).catch(error => console.error('Error:', error));
+        }
+        map.on('click', onMapClick);
+        
+        
+    </script>
+</body>
+</html>
