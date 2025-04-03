@@ -1,0 +1,30 @@
+---
+const { id } = Astro.props;
+---
+<dialog id={id} class="modal">
+  <div class="modal-box">
+    <form method="POST">
+      <fieldset class="p-4 border border-base-300 rounded-lg fieldset">
+        <legend class="fieldset-legend">Report Details</legend>
+  
+        <label class="fieldset-label">Category</label>
+        <select class="w-full border border-base-300 select" name="category">
+          <option value="Pothole">Pothole</option>
+          <option value="Traffic">Traffic</option>
+        </select>
+  
+        <label class="fieldset-label">Address</label>
+        <textarea class="w-full textarea" name="address"></textarea>
+  
+        <label id="empty_label" class="fieldset-label"></label>
+        <button class="btn">Submit</button>
+      </fieldset>
+    </form>
+  </div>
+</dialog>
+
+<style>
+  #empty_label:after {
+    content: "\200b";
+  }
+</style>
