@@ -1,44 +1,83 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import NavBar from "../components/NavBar.astro";
-import {
-  Report,
-  db,
-} from "astro:db";
+import ReportPopup from "../components/ReportPopup.astro";
+import { Report, db } from "astro:db";
+import { writeFileSync } from "node:fs";
+import { randomUUID } from "node:crypto";
 
+if (Astro.request.method === "POST") {
+  const data = await Astro.request.formData();
+  const category = data.get("category");
+  const address = data.get("address");
+  const file = data.get("image");
+
+  let imagePath = null;
+
+  if (file && file.name && file.arrayBuffer) {
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const extension = file.name.split(".").pop();
+    const filename = `${randomUUID()}.${extension}`;
+    const outputPath = `public/uploads/${filename}`;
+    writeFileSync(outputPath, buffer);
+    imagePath = `/uploads/${filename}`;
+  }
+
+  await db.insert(Report).values({
+    category,
+    address,
+    image: imagePath,
+    createdAt: new Date(),
+    resolved: false,
+  });
+
+  return Astro.redirect("/");
+}
 
 const reports = await db.select().from(Report);
 ---
+
 <Layout>
   <NavBar />
 
   <div class="px-4 py-4">
     <p class="mb-4 text-xl underline">Generated Reports</p>
 
-    <table class="w-5/6 border-collapse border border-gray-400">
+    <table class="w-full border-collapse border border-gray-400">
       <thead>
         <tr>
-          <th class="border border-gray-400">Report Category</th>
-          <th class="border border-gray-400">Address</th>
-          <th class="border border-gray-400">Date Created</th>
-          <th class="border border-gray-400">Resolved</th>
+          <th class="border border-gray-400 px-2 py-1">Report Category</th>
+          <th class="border border-gray-400 px-2 py-1">Address</th>
+          <th class="border border-gray-400 px-2 py-1">Date Created</th>
+          <th class="border border-gray-400 px-2 py-1">Resolved</th>
+          <th class="border border-gray-400 px-2 py-1">Image</th>
         </tr>
       </thead>
 
-      <tbody class="text-center"> {
-        reports.map((report) => (
-          <tr>
-            <td class="border border-gray-400">{report.category}</td>
-            <td class="border border-gray-400">{report.address}</td>
-            <td class="border border-gray-400">{report.createdAt.toLocaleString()}</td>
-            <td class="border border-gray-400">{report.resolved ? "✔" : "✘"}</td>
-          </tr>
-        ))
-      } </tbody>
+     <tbody class="text-center">
+        {
+          reports.map((report) => (
+            <tr>
+              <td class="border border-gray-400 px-2 py-1">{report.category}</td>
+              <td class="border border-gray-400 px-2 py-1">{report.address}</td>
+              <td class="border border-gray-400 px-2 py-1">{report.createdAt.toLocaleString()}</td>
+              <td class="border border-gray-400 px-2 py-1">{report.resolved ? "✔" : "✘"}</td>
+              <td class="border border-gray-400 px-2 py-1">
+                {
+                  report.image
+                    ? <img src={report.image} alt="Report image" class="w-20 h-auto mx-auto rounded" />
+                    : "No image"
+                }
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
     </table>
+  </div>
 
-    <div class="fixed bottom-4 right-4">
-      <a href="/add" class="bg-blue-400 border-2 border-black font-bold py-2 px-4">+ Create Report</a>
-    </div>
+  <!-- Popup button in bottom-right corner -->
+  <div class="fixed bottom-4 right-4 z-50">
+    <ReportPopup />
   </div>
 </Layout>

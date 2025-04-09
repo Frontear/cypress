@@ -1,0 +1,89 @@
+
+<script client:load>
+  document.addEventListener("DOMContentLoaded", () => {
+    const button = document.getElementById("toggle-popup");
+    const popup = document.getElementById("popup-menu");
+
+    button?.addEventListener("click", () => {
+      popup?.classList.toggle("hidden");
+    });
+  });
+</script>
+
+<div class="relative flex flex-col items-end">
+  <!-- Popup form -->
+  <div
+    id="popup-menu"
+    class="hidden mb-2 w-80 bg-white shadow-lg border border-gray-300 z-10 rounded-lg"
+  >
+    <form action="/" method="POST" enctype="multipart/form-data" class="p-4 space-y-3">
+      <p class="font-semibold mb-2">Submit a Report</p>
+
+      <!-- Category -->
+      <div>
+        <label for="category" class="block text-sm font-medium mb-1">Category</label>
+        <select
+          id="category"
+          name="category"
+          required
+          class="block w-full border border-gray-300 rounded-md p-1"
+        >
+          <option value="">-- Select --</option>
+          <option value="Pothole">Pothole</option>
+          <option value="Road Damage">Road Damage</option>
+          <option value="Snow Removal">Snow Removal</option>
+          <option value="Blocked Pathways">Blocked Pathways</option>
+          <option value="Broken Sidewalks">Broken Sidewalks</option>
+          <option value="Malfunctioning Traffic Lights">Malfunctioning Traffic Lights</option>
+          <option value="Streetlight Outages">Streetlight Outages</option>
+          <option value="Water Leaks">Water Leaks</option>
+          <option value="Flooding">Flooding</option>
+          <option value="Garbage Overflow">Garbage Overflow</option>
+          <option value="Illegal Dumping">Illegal Dumping</option>
+          <option value="Noise Complaint">Noise Complaint</option>
+          <option value="Graffiti">Graffiti</option>
+          <option value="Damaged Signage">Damaged Signage</option>
+        </select>
+      </div>
+
+      <!-- Address -->
+      <div>
+        <label for="address" class="block text-sm font-medium mb-1">Address</label>
+        <textarea
+          id="address"
+          name="address"
+          required
+          rows="2"
+          class="block w-full border border-gray-300 rounded-md p-1"
+        ></textarea>
+      </div>
+
+      <!-- Image Upload -->
+      <div>
+        <label for="image" class="block text-sm font-medium mb-1">Upload Photo (optional)</label>
+        <input
+          type="file"
+          name="image"
+          accept="image/*"
+          class="block w-full border border-gray-300 rounded-md p-1 text-sm"
+        />
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 w-full"
+      >
+        Submit Report
+      </button>
+    </form>
+  </div>
+
+  <!-- Toggle Button -->
+  <button
+    id="toggle-popup"
+    class="bg-blue-400 border-2 border-black font-bold py-2 px-4 rounded"
+  >
+    Create Report
+  </button>
+</div>

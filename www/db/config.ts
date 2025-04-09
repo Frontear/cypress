@@ -11,6 +11,7 @@ const Report = defineTable({
     category: column.text(),
     address: column.text(),
     createdAt: column.date({ default: NOW }),
+    image: column.text({ optional: true }),
     resolved: column.boolean({ default: false }),
   },
 })
