@@ -12,9 +12,10 @@ const { id } = Astro.props;
           <option value="Pothole">Pothole</option>
           <option value="Traffic">Traffic</option>
         </select>
-  
-        <label class="fieldset-label">Address</label>
-        <textarea class="w-full textarea" name="address"></textarea>
+
+        <label class="fieldset-label">Location</label>
+        <textarea id="addr" class="w-full textarea hidden" name="address"></textarea>
+        <div id="map" class="h-[200px] border border-base-300 rounded-lg"></div>
   
         <label id="empty_label" class="fieldset-label"></label>
         <button class="btn">Submit</button>
@@ -28,3 +29,35 @@ const { id } = Astro.props;
     content: "\200b";
   }
 </style>
+
+<script>
+  import "leaflet/dist/leaflet";
+  import "leaflet/dist/leaflet.css";
+
+  const TORONTO = [43.6891, -79.4163];
+
+  const map = L.map("map").setView(TORONTO, 11);
+  const addr = document.querySelector("#addr");
+  let marker = null;
+
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: `&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>`
+  }).addTo(map);
+
+  map.on("click", (e) => {
+    let address = e.latlng;
+
+    if (marker !== null) {
+      marker.remove();
+    }
+
+    marker = L.marker(address).addTo(map);
+
+    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${address.lat}&lon=${address.lng}&format=json&zoom=18`)
+      .then(resp => resp.json())
+      .then(data => {
+        addr.value = data.display_name;
+      })
+  });
+</script>
