@@ -13,7 +13,6 @@ if (Astro.request.method === "POST") {
   const category = data.get("category");
   const address = data.get("address");
 
-  // TODO: validate form client-side
   await db.insert(Report).values({ category, address });
   return Astro.redirect("/");
 }
