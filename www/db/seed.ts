@@ -8,7 +8,7 @@ export default async function seed() {
   await db.insert(Report).values([
     {
       id: 1,
-      category: "Traffic",
+      category: "Pothole",
       address: "350 Victoria Street, Toronto ON M5B 2K3",
       resolved: true,
     },

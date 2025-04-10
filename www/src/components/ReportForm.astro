@@ -3,19 +3,34 @@ const { id } = Astro.props;
 ---
 <dialog id={id} class="modal">
   <div class="modal-box">
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
       <fieldset class="p-4 border border-base-300 rounded-lg fieldset">
         <legend class="fieldset-legend">Report Details</legend>
   
         <label class="fieldset-label">Category</label>
         <select class="w-full border border-base-300 select" name="category">
           <option value="Pothole">Pothole</option>
-          <option value="Traffic">Traffic</option>
+          <option value="Road Damage">Road Damage</option>
+          <option value="Snow Removal">Snow Removal</option>
+          <option value="Blocked Pathways">Blocked Pathways</option>
+          <option value="Broken Sidewalks">Broken Sidewalks</option>
+          <option value="Malfunctioning Traffic Lights">Malfunctioning Traffic Lights</option>
+          <option value="Streetlight Outages">Streetlight Outages</option>
+          <option value="Water Leaks">Water Leaks</option>
+          <option value="Flooding">Flooding</option>
+          <option value="Garbage Overflow">Garbage Overflow</option>
+          <option value="Illegal Dumping">Illegal Dumping</option>
+          <option value="Noise Complaint">Noise Complaint</option>
+          <option value="Graffiti">Graffiti</option>
+          <option value="Damaged Signage">Damaged Signage</option>
         </select>
 
         <label class="fieldset-label">Location</label>
         <textarea id="addr" class="w-full textarea hidden" name="address"></textarea>
         <div id="map" class="h-[200px] border border-base-300 rounded-lg"></div>
+
+        <label class="fieldset-label">Image</label>
+        <input type="file" name="image" accept="image/*" class="w-full file-input" />
   
         <label id="empty_label" class="fieldset-label"></label>
         <button class="btn">Submit</button>

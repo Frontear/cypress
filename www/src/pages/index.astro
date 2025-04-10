@@ -1,6 +1,10 @@
 ---
+import { writeFileSync } from "node:fs";
+import { randomUUID } from "node:crypto";
+
 import Default from "../layouts/Default.astro";
 import ReportForm from "../components/ReportForm.astro";
+import Image from "../components/Image.astro";
 import {
   Report,
   db,
@@ -11,8 +15,25 @@ if (Astro.request.method == "POST") {
   const data = await Astro.request.formData();
   const category = data.get("category");
   const address = data.get("address");
+  const file = data.get("image");
 
-  await db.insert(Report).values({ category, address });
+  let image = null;
+
+  if (file && file.name && file.arrayBuffer) {
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const extension = file.name.split(".").pop();
+    const filename = `${randomUUID()}.${extension}`;
+    const outputPath = `public/images/${filename}`;
+
+    writeFileSync(outputPath, buffer);
+    image = `/images/${filename}`;
+  }
+
+  await db.insert(Report).values({
+    category,
+    address,
+    image,
+  });
 }
 
 const reports = await db.select().from(Report);
@@ -26,6 +47,7 @@ const reports = await db.select().from(Report);
           <th>Category</th>
           <th>Address</th>
           <th>Date Created</th>
+          <th>Image</th>
           <th>Resolved</th>
         </tr>
       </thead>
@@ -37,6 +59,16 @@ const reports = await db.select().from(Report);
               <td>{report.category}</td>
               <td>{report.address}</td>
               <td>{report.createdAt.toLocaleString()}</td>
+              <td>
+                {
+                  report.image ?
+                  <span>
+                    <p class="link" onclick=`img${report.id}_modal.showModal()`>Show</p>
+                    <Image id=`img${report.id}_modal` path={report.image} />
+                  </span> :
+                  <p>N/A</p>
+                }
+              </td>
               <td>{report.resolved ? "✔" : "✘"}</td>
             </tr>
           ))
@@ -47,6 +79,6 @@ const reports = await db.select().from(Report);
 
   <div class="absolute right-2 bottom-2">
     <button class="btn btn-secondary btn-sm" onclick="report_form.showModal()">+ Add Report</button>
-    <ReportForm id="report_form"/>
+    <ReportForm id="report_form" />
   </div>
 </Default>

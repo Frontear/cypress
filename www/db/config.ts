@@ -12,6 +12,7 @@ const Report = defineTable({
     address: column.text(),
     createdAt: column.date({ default: NOW }),
     resolved: column.boolean({ default: false }),
+    image: column.text({ optional: true }),
   },
 })
 

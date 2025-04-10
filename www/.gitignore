@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Don't track images, but acknowledge directory
+public/images/*
+!public/images/.keep
